@@ -12,6 +12,7 @@ PLAYER_WIDTH = 30
 PLAYER_HEIGHT = 50
 PLAYER_VEL = 1 # Player Velocity
 
+
 def draw(player):
     WIN.blit(BG, (0, 0))
 
@@ -37,9 +38,9 @@ def main():
                 break
 
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
+        if keys[pygame.K_LEFT] and (player.x-PLAYER_VEL) > 2:
             player.x -= PLAYER_VEL
-        if keys[pygame.K_RIGHT]:
+        if keys[pygame.K_RIGHT] and (player.x+PLAYER_VEL) < WIDTH-PLAYER_WIDTH-2:
             player.x += PLAYER_VEL
 
         draw(player)
