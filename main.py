@@ -1,6 +1,7 @@
 import pygame
 import time
 import random
+import os
 
 pygame.font.init()
 
@@ -23,11 +24,14 @@ STAR_HEIGHT = 20
 STAR_VEL = 5
 
 
-def draw(player, elapsed_time, stars):
+def draw(player, elapsed_time, stars, highscore):
     WIN.blit(BG, (0, 0))
 
     time_text = FONT.render(f"Time: {round(elapsed_time)}s", 1, "white")
     WIN.blit(time_text, (10, 10))
+
+    highscore_text = FONT.render(f"Highscore: {highscore}", 1, "red")
+    WIN.blit(highscore_text, ((WIDTH-highscore_text.get_width() - 10), 10))
 
     pygame.draw.rect(WIN, "red", player)
 
@@ -57,9 +61,17 @@ def main():
 
     hit = False
 
+    if "score.txt" not in os.listdir():
+        f = open("score.txt", "w")
+        f.write("0")
+        f.close()
+
     while run:
         clock.tick(60)
         elapsed_time = time.time() - start_time
+
+        with open("score.txt") as x:
+            highscore = x.read()
 
         star_count += clock.tick(60)
         if star_count > star_add_increment:
@@ -101,10 +113,15 @@ def main():
                 ),
             )
             pygame.display.update()
+            with open("score.txt", "w") as f:
+                if int(highscore) < round(elapsed_time):
+                    f.write(str(round(elapsed_time)))
+                else:
+                    pass
             pygame.time.delay(5000)
             break
 
-        draw(player, elapsed_time, stars)
+        draw(player, elapsed_time, stars, highscore)
 
     pygame.quit()
 
